@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="charts.css" />
+		<script type="text/javascript" src="../scripts/jquery.js" > </script>		
+		<script type="text/javascript" src="../scripts/d3.js" > </script>
+		<script type="text/javascript" src="charts.js" > </script>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				var count = 10;
+				
+				chart = $("#chart");
+				var chart_position = chart.position();
+				left = chart_position.left;
+				top = chart_position.top;
+				h = chart.height();
+				w = chart.width();
+
+				data = [[100,100],[200,310]];
+				var min_x = d3.min(this.data,function(d){ return d[1]});
+				var max_x = d3.max(this.data,function(d){ return d[1]});
+
+				padding = 40;
+				this.xScale = d3.scale.linear().domain([0,max_x])
+									   .range([this.h-this.padding,this.padding]);
+
+				this.yScale = d3.scale.linear().domain([0,max_x])
+									   .range([this.h-this.padding,this.padding]);
+
+				var bars = d3.select("#chart")
+					 .selectAll("circle")
+					 .data(data)
+					 .enter()
+					 .append("circle")
+					 .attr("r","5")
+					 .attr("cx",function(d){return })
+					 .attr("cy",function(d){})
+					 .attr("fill","teal");
+
+				$("#update").click(function(){
+					data = getData(count);
+					chart.updateChart(data);
+				});
+
+				$("#addone").click(function(){
+					count++;
+					var y = Math.floor(Math.random() * 5500);
+					var max_x = d3.max(data,function(d){return d[0]});
+					var x = Math.floor(Math.random() * max_x);
+					// console.log(x);
+					data.push([x,y]);
+					chart.addData([[x,y]]);
+				});		
+
+				$("#remove").click(function(){
+					count--;
+					data.shift();
+					chart.updateData(data);
+				});				
+
+				$("#sort_ascend").click(function(){
+					chart.sortBars();
+				});
+
+
+
+			});
+
+			var getData = function(count){
+				var data = [];
+				for(var i=0;i<count;i++){
+					var y = Math.floor(Math.random() * 5500);
+					data.push([i*50,y]);
+				}
+				return data;
+			}
+
+
+		</script>
+		<style type="text/css">
+
+		</style>
+	</head>
+	
+	<body>
+
+		<svg id="chart"/>
+		<button id="update">Update</button>
+		<button id="addone">Add one</button>
+		<button id="remove">Remove</button>
+		<button id="sort_ascend">Order Ascending</button>
+		<div class="tooltip hidden">
+			<p><strong>More details</strong></p>
+			<p>The value is <span id="value"></span></p>
+		</div>
+	</body>
+</html>

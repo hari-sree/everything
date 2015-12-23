@@ -1,0 +1,145 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="charts.css" />
+		<script type="text/javascript" src="../scripts/jquery.js" > </script>		
+		<script type="text/javascript" src="../scripts/d3.js" > </script>
+		<script type="text/javascript" src="../scripts/underscore.js" > </script>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+
+				var dataset = {
+			        nodes: [
+			                { name: "Adam" },
+			                { name: "Bob" },
+			                { name: "Carrie" },
+			                { name: "Donovan" },
+			                { name: "Edward" },
+			                { name: "Felicity" },
+			                { name: "George" },
+			                { name: "Hannah" },
+			                { name: "Iris" },
+			                { name: "Jerry" }
+			        ],
+			        edges: [
+			                { source: 0, target: 1 },
+			                { source: 0, target: 2 },
+			                { source: 0, target: 3 },
+			                { source: 0, target: 4 },
+			                { source: 1, target: 5 },
+			                { source: 2, target: 5 },
+			                { source: 2, target: 5 },
+			                { source: 3, target: 4 },
+			                { source: 5, target: 8 },
+			                { source: 5, target: 9 },
+			                { source: 6, target: 7 },
+			                { source: 7, target: 8 },
+			                { source: 8, target: 9 }
+			        ]
+		};
+			var w= 1000;
+			var h=500;
+			var force = d3.layout.force()
+						  .nodes(dataset.nodes)
+						  .links(dataset.edges)
+						  .size([w,h])
+						  .linkDistance([100])
+						  .charge([-300])
+						  .start();
+
+			var edges = d3.select("#chart").selectAll("line")
+							   .data(dataset.edges)
+							   .enter()
+							   .append("line")
+							   .style("stroke", "#ccc")
+        					   .style("stroke-width", 1);
+
+        	var color = d3.scale.category10();
+
+			var nodes = d3.select("#chart").selectAll("circle")
+							   .data(dataset.nodes)
+							   .enter()
+							   .append("circle")
+							   .attr("r",20)
+							   .style("fill",function(d,i){
+							   	return color(i);
+							   })
+							   .call(force.drag);
+
+			var labels = d3.select("#chart")
+						   .selectAll("text")
+						   .data(dataset.nodes)
+						   .enter()
+						   .append("text");
+
+						   
+
+
+			force.on("tick",function(){
+				edges.attr("x1",function(d,i){ return d.source.x;})
+					 .attr("y1",function(d,i){ return d.source.y;})
+					 .attr("x2",function(d,i){ return d.target.x;})
+					 .attr("y2",function(d,i){ return d.target.y;});
+
+				nodes.attr("cx",function(d){return d.x;})
+					 .attr("cy",function(d){return d.y;});
+
+				labels.attr("x",function(d){return d.x;})
+						   .attr("y",function(d){return d.y;})
+						   .text(function(d){return d.name;});
+			});							   
+
+			// setup 
+
+			var source_nodes = $('#source_nodes');
+			var target_nodes = $('#target_nodes');
+
+			_.each(dataset.nodes , function(node){
+				source_nodes.append(createOption(node.name,node.name));
+				target_nodes.append(createOption(node.name,node.name));
+			});
+
+			function createOption(value,label){
+				return $('<option>',{
+				value:value,
+				text:label
+				});
+			}			
+
+
+			});
+			
+
+							   // .attr("");
+			// edges.							   
+
+
+		</script>
+		<style type="text/css">
+			#chart {				
+				border-style: solid;
+				display: block;
+				width: 1000px;
+				height : 500px;
+				margin: auto;
+				/*visibility: hidden;*/
+			}
+		</style>
+	</head>
+	
+	<body>
+		<svg id="chart"/>
+		<h1>Chart Builder</h1>
+		<label>New Node label </label><input type="text"></input>
+
+		<button>Add Node</button>
+
+		<p>New Edge </p>
+		<label>Source</label><select id="source_nodes"></select>		
+		<label>Target</label><select id="target_nodes"></select>	
+
+		<button>Add Edge</button>	
+
+	</body>
+</html>

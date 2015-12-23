@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<style type="text/css">
+			#chart {				
+				border-style: solid;
+				display: block;
+				width: 1000px;
+				height : 500px;
+				margin: auto;
+			}
+			.axis path,
+			.axis line{
+			 	fill:none;
+			 	stroke:black;
+			 	shape-rendering:crispEdges;
+			}
+			.axis text {
+			    font-family: sans-serif;
+			    font-size: 11px;
+			}
+
+		</style>
+		<script type="text/javascript" src="../scripts/jquery.js" > </script>		
+		<script type="text/javascript" src="../scripts/d3.js" > </script>
+
+		<script type="text/javascript">
+			console.log("sorcery !! ");
+			$(document).ready(function(){
+				drawChart();
+			});
+
+			var drawChart = function(){
+				var padding = 45; 
+				var chart = $("#chart");
+				var chart_position = chart.position();
+				console.log(chart)
+				var left = chart_position.left;
+				var top = chart_position.top;
+				var h = chart.height();
+				var w = chart.width();
+
+				console.log(w);
+				var xScale = d3.scale.linear().domain([0,500]).range([padding,w-2*padding]);
+				var yScale = d3.scale.linear().domain([1000,5500]).range([h-padding,padding]);
+
+				var xAxis = d3.svg.axis().orient("bottom")
+										 .scale(xScale);
+				var yAxis = d3.svg.axis().orient("left")
+										 .scale(yScale);
+										 						 
+				d3.select("#chart").append("g")
+								   .attr("class","axis")
+								   .attr("transform","translate("+0+","+(h-padding)+")")
+								   .call(xAxis);
+
+				d3.select("#chart").append("g")
+								   .attr("class","axis")
+								   .attr("transform","translate("+padding+","+0+")")
+								   .call(yAxis);				   
+				var data = [];				   
+				for(var i=0;i<10;i++){
+					data.push([i*50,1000 + i*500]);
+				}				   
+				console.log(data);
+				d3.select("#chart").selectAll("circle")
+								   .data(data)
+								   .enter()
+								   .append("circle")
+								   .attr("cx",function(d){ return xScale(d[0]);})
+								   .attr("cy",function(d){ return yScale(d[1]);})
+								   .attr("r",5)
+								   .attr("fill","red")
+								   .attr("stroke","black");
+			}
+
+		</script>
+		
+
+	</head>
+	
+	<body>
+		<svg id="chart"/>
+	</body>
+</html>

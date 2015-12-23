@@ -1,0 +1,59 @@
+
+#chart {				
+	border-style: solid;
+	display: block;
+	width: 1000px;
+	height : 500px;
+	margin: auto;
+	/*visibility: hidden;*/
+}
+.axis path,
+.axis line{
+ 	fill:none;
+ 	stroke:black;
+ 	shape-rendering:crispEdges;
+}
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+
+div.bar {
+	width:60;
+	height: 50;
+	background-color:teal;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+rect:hover{
+	fill: orange;
+}
+
+rect {
+	-o-transition : all 0.1s ;
+	-moz-transition : all 0.1s ;
+	-webkit-transition : all 0.1s ;
+	transition : fill 0.1s ;
+}
+
+div.tooltip {
+	position: absolute;
+	width:200px ;
+	height: auto;
+	padding: 10px;
+	border-width: 2;
+	border-radius: 5px;
+	box-shadow: 5px 5px 1px gray; 
+	pointer-events:none;
+	background-color: white;
+}
+.tooltip p{
+	font-family: sans-serif;
+	font-size: 16px;
+	line-height: 20px;
+	margin:0;
+}
+.tooltip.hidden{
+	display:none;
+}
